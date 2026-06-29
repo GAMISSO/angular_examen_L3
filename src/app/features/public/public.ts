@@ -1,10 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HeaderPublic } from '../../layout/public/header-public/header-public';
 
 @Component({
   selector: 'app-public',
-  imports: [HeaderPublic, RouterOutlet],
+  imports: [RouterOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './public.html',
   styleUrl: './public.css',

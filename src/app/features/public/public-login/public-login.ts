@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthApiService } from '../../../core/services/auth-api.service';
 import { SessionService } from '../../../core/services/session.service';
 
 @Component({
@@ -12,22 +13,22 @@ import { SessionService } from '../../../core/services/session.service';
 })
 export class PublicLogin {
     private readonly formBuilder = inject(FormBuilder);
+    private readonly authApi = inject(AuthApiService);
     private readonly sessionService = inject(SessionService);
     private readonly router = inject(Router);
 
     protected readonly submitting = signal(false);
-    protected readonly role = signal<'client' | 'agent-guichet'>('client');
+    protected readonly creatingAccount = signal(false);
     protected readonly loginForm = this.formBuilder.nonNullable.group({
-        displayName: ['Amina Diallo', [Validators.required, Validators.minLength(3)]],
-        role: ['client' as 'client' | 'agent-guichet', [Validators.required]],
+        email: ['', [Validators.required, Validators.email]],
+        password: ['', [Validators.required, Validators.minLength(4)]],
     });
-
-    protected readonly isInvalid = computed(() => this.loginForm.invalid && this.loginForm.touched);
-
-    protected setRole(value: 'client' | 'agent-guichet'): void {
-        this.role.set(value);
-        this.loginForm.controls.role.setValue(value);
-    }
+    protected readonly createClientForm = this.formBuilder.nonNullable.group({
+        fullName: ['', [Validators.required, Validators.minLength(3)]],
+        email: ['', [Validators.required, Validators.email]],
+        phone: ['', [Validators.required, Validators.pattern(/^\+?[0-9]{8,15}$/)]],
+        password: ['', [Validators.required, Validators.minLength(4)]],
+    });
 
     protected submit(): void {
         this.loginForm.markAllAsTouched();
@@ -37,18 +38,30 @@ export class PublicLogin {
         }
 
         this.submitting.set(true);
-        const { role, displayName } = this.loginForm.getRawValue();
-        this.sessionService.login({
-            email: `${displayName.toLowerCase().replace(/\s+/g, '.')}@badwallet.tn`,
-            password: 'demo',
-            role,
-        });
+        const { email, password } = this.loginForm.getRawValue();
+        const session = this.sessionService.login({ email, password });
 
-        void this.router.navigate(['/private/dashboard']);
+        void this.router.navigateByUrl(session.role === 'agent-guichet' ? '/private/agent' : '/private/client');
     }
 
-    protected demoLogin(value: 'client' | 'agent-guichet'): void {
-        this.sessionService.demoLogin(value);
-        void this.router.navigate(['/private/dashboard']);
+    protected createClientAccount(): void {
+        this.createClientForm.markAllAsTouched();
+
+        if (this.createClientForm.invalid || this.creatingAccount()) {
+            return;
+        }
+
+        this.creatingAccount.set(true);
+        const payload = this.createClientForm.getRawValue();
+
+        this.authApi.registerClient(payload).subscribe({
+            next: () => {
+                this.creatingAccount.set(false);
+                this.createClientForm.reset();
+            },
+            error: () => {
+                this.creatingAccount.set(false);
+            },
+        });
     }
 }

@@ -1,17 +1,17 @@
 :root {
     color-scheme: light;
-    --page-bg: #eef3f8;
-    --surface: rgba(255, 255, 255, 0.82);
+    --page-bg: #ffffff;
+    --surface: #ffffff;
     --surface-strong: #ffffff;
-    --border: rgba(16, 24, 40, 0.08);
-    --text: #102033;
-    --muted: #5c6b7a;
-    --primary: #0f766e;
-    --primary-strong: #0b5f59;
-    --accent: #f97316;
-    --danger: #b42318;
-    --shadow: 0 24px 70px rgba(12, 19, 32, 0.12);
-    --shadow-soft: 0 14px 35px rgba(12, 19, 32, 0.08);
+    --border: #000000;
+    --text: #000000;
+    --muted: #000000;
+    --primary: #000000;
+    --primary-strong: #000000;
+    --accent: #000000;
+    --danger: #000000;
+    --shadow: 0 24px 70px rgba(0, 0, 0, 0.18);
+    --shadow-soft: 0 14px 35px rgba(0, 0, 0, 0.12);
     --radius-lg: 28px;
     --radius-md: 20px;
 }
@@ -23,12 +23,9 @@ body {
 
 body {
     margin: 0;
-    font-family: 'Aptos', 'Segoe UI', 'Trebuchet MS', sans-serif;
+    font-family: 'Aptos', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
     color: var(--text);
-    background:
-        radial-gradient(circle at top left, rgba(15, 118, 110, 0.16), transparent 30%),
-        radial-gradient(circle at 85% 15%, rgba(249, 115, 22, 0.12), transparent 24%),
-        linear-gradient(180deg, var(--page-bg) 0%, #f7fafc 100%);
+    background: #ffffff;
 }
 
 * {
@@ -48,5 +45,6 @@ textarea {
 }
 
 ::selection {
-    background: rgba(15, 118, 110, 0.18);
+    background: #000000;
+    color: #ffffff;
 }

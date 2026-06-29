@@ -1,13 +1,12 @@
 export type UserRole = 'client' | 'agent-guichet';
 
 export interface SessionUser {
-  email: string;
-  displayName: string;
-  role: UserRole;
+    email: string;
+    displayName: string;
+    role: UserRole;
 }
 
 export interface LoginCredentials {
-  email: string;
-  password: string;
-  role: UserRole;
+    email: string;
+    password: string;
 }

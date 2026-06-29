@@ -1,4 +1,5 @@
 export const environment = {
     production: false,
-    limite: 5
+    apiBaseUrl: 'http://localhost:8081',
+    apiDocsUrl: 'http://localhost:8082/v3/api-docs',
 };

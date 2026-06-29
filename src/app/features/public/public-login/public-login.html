@@ -1,0 +1,53 @@
+<section class="login-layout">
+    <article class="login-panel">
+        <p class="eyebrow">Plateforme wallet</p>
+        <h1>Connexion sécurisée</h1>
+        <p class="lead">
+            Le front est structuré pour les comptes client et les opérations de guichet.
+        </p>
+
+        <div class="role-switch" role="tablist" aria-label="Choix du profil">
+            <button type="button" [class.is-active]="role() === 'client'" (click)="setRole('client')">
+                Client
+            </button>
+            <button type="button" [class.is-active]="role() === 'agent-guichet'" (click)="setRole('agent-guichet')">
+                Agent guichet
+            </button>
+        </div>
+
+        <form class="login-form" [formGroup]="loginForm" (ngSubmit)="submit()" novalidate>
+            <label>
+                <span>Nom d'affichage</span>
+                <input type="text" formControlName="displayName" placeholder="Amina Diallo" />
+            </label>
+
+            <label>
+                <span>Profil</span>
+                <select formControlName="role" (change)="setRole(loginForm.controls.role.value)">
+                    <option value="client">Client</option>
+                    <option value="agent-guichet">Agent guichet</option>
+                </select>
+            </label>
+
+            @if (isInvalid()) {
+            <p class="error" role="alert">Le nom doit contenir au moins 3 caractères.</p>
+            }
+
+            <div class="actions">
+                <button class="primary" type="submit">Entrer</button>
+                <button class="secondary" type="button" (click)="demoLogin(loginForm.controls.role.value)">
+                    Connexion démo
+                </button>
+            </div>
+        </form>
+    </article>
+
+    <aside class="info-panel">
+        <h2>Ce qui est déjà en place</h2>
+        <ul>
+            <li>Un routage public et privé séparé.</li>
+            <li>Une session locale simple pour prototyper le login.</li>
+            <li>Une base de dashboard prête pour brancher le backend.</li>
+        </ul>
+    </aside>
+</section>

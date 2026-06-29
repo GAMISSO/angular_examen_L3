@@ -1,1 +1,21 @@
+<header class="header-nav">
+    <a class="header-nav__brand" routerLink="/private/dashboard">
+        <span>BadWallet</span>
+        <small>Espace privé</small>
+    </a>
+
+    <nav class="header-nav__links" aria-label="Navigation principale">
+        <a routerLink="/private/dashboard" routerLinkActive="is-active">Tableau de bord</a>
+        <a routerLink="/private/client" routerLinkActive="is-active">Client</a>
+        <a routerLink="/private/agent" routerLinkActive="is-active">Guichet</a>
+    </nav>
+
+    <div class="header-nav__session">
+        <div>
+            <strong>{{ userLabel() }}</strong>
+            <small>{{ roleLabel() }}</small>
+        </div>
+        <button type="button" (click)="logout()">Déconnexion</button>
+    </div>
+</header>
 <p>header works!</p>

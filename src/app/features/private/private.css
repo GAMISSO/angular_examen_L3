@@ -1,0 +1,11 @@
+.private-shell {
+    min-height: 100vh;
+    display: grid;
+    gap: 1.25rem;
+    padding: 1.25rem;
+}
+
+.private-shell__content {
+    width: min(1180px, 100%);
+    margin: 0 auto 1.5rem;
+}

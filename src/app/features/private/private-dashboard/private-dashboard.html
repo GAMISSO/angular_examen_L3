@@ -1,0 +1,24 @@
+<section class="dashboard-layout">
+    <header class="dashboard-hero">
+        <p class="eyebrow">Tableau de bord</p>
+        <h1>Votre espace wallet privé</h1>
+        <p>
+            Bonjour {{ sessionService.session()?.displayName ?? 'Utilisateur' }}, l'interface est prête pour
+            suivre les clients, le guichet et les prochaines APIs backend.
+        </p>
+    </header>
+
+    <div class="dashboard-grid">
+        <article>
+            <h2>Espace client</h2>
+            <p>Suivi du solde, des opérations et des actions rapides.</p>
+            <a routerLink="/private/client">Ouvrir</a>
+        </article>
+
+        <article>
+            <h2>Espace guichet</h2>
+            <p>Opérations terrain, validation et clôture.</p>
+            <a routerLink="/private/agent">Ouvrir</a>
+        </article>
+    </div>
+</section>

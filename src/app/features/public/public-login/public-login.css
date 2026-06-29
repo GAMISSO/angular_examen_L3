@@ -1,41 +1,76 @@
-.login-layout {
-    min-height: calc(100vh - 2.5rem);
+.auth-layout {
+    width: min(820px, 100%);
+    margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1rem;
-    align-items: start;
-    padding: 1.25rem;
 }
 
-.login-panel {
-    padding: 2rem;
+.auth-panel {
+    padding: clamp(1.5rem, 4vw, 2.5rem);
     border-radius: var(--radius-lg);
     border: 1px solid var(--border);
     box-shadow: var(--shadow);
-    background: var(--surface);
+    background: rgba(255, 255, 255, 0.96);
 }
 
-.login-panel h1 {
-    margin: 0 0 1rem;
-    font-size: clamp(1.5rem, 2.8vw, 2.5rem);
+.auth-panel--login {
+    width: min(100%, 560px);
+    justify-self: center;
+    margin-top: clamp(1.5rem, 8vh, 5rem);
 }
 
-.login-form {
+.auth-panel--register {
+    width: min(100%, 560px);
+    justify-self: center;
+}
+
+.eyebrow {
+    margin: 0 0 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.75rem;
+    font-weight: 800;
+}
+
+h1,
+h2,
+p {
+    margin: 0;
+}
+
+h1 {
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    line-height: 0.95;
+    max-width: 8ch;
+}
+
+h2 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+.lead {
+    margin-top: 1rem;
+    max-width: 48ch;
+    color: rgba(0, 0, 0, 0.74);
+}
+
+.auth-form {
     display: grid;
     gap: 1rem;
+    margin-top: 1.5rem;
 }
 
-.login-form label {
+.auth-form label {
     display: grid;
     gap: 0.45rem;
     font-weight: 600;
 }
 
-.login-form span {
+.auth-form span {
     color: var(--text);
 }
 
-.login-form input {
+.auth-form input {
     border-radius: 16px;
     border: 1px solid var(--border);
     padding: 0.95rem 1rem;
@@ -43,41 +78,55 @@
     color: var(--text);
 }
 
-.login-form input:focus {
+.auth-form input:focus {
     outline: 2px solid #000000;
     outline-offset: 2px;
 }
 
 .actions {
     display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
     justify-content: flex-end;
 }
 
-.primary {
-    border: 1px solid #000000;
+.primary,
+.secondary {
     border-radius: 999px;
     padding: 0.95rem 1.2rem;
     font-weight: 700;
     cursor: pointer;
+}
+
+.primary {
+    border: 1px solid #000000;
     background: #000000;
     color: #ffffff;
 }
 
-.primary:disabled {
+.secondary {
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text);
+}
+
+.primary:disabled,
+.secondary:disabled {
     opacity: 0.7;
     cursor: not-allowed;
 }
 
-.error {
-    padding: 0.8rem 0.95rem;
+.message {
+    margin-top: 1rem;
+    padding: 0.85rem 1rem;
     border-radius: 16px;
-    background: #ffffff;
-    color: #000000;
     border: 1px solid var(--border);
 }
 
-@media (max-width: 960px) {
-    .login-layout {
-        grid-template-columns: 1fr;
-    }
+.message--success {
+    background: #f4f4f4;
+}
+
+.message--error {
+    background: #ffffff;
 }

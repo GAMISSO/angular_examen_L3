@@ -1,24 +1,100 @@
 <section class="dashboard-layout">
     <header class="dashboard-hero">
         <p class="eyebrow">Tableau de bord</p>
-        <h1>Votre espace wallet privé</h1>
-        <p>
-            Bonjour {{ sessionService.session()?.displayName ?? 'Utilisateur' }}, l'interface est prête pour
-            suivre les clients, le guichet et les prochaines APIs backend.
-        </p>
+        <div class="hero-row">
+            <div>
+                <h1>Votre espace wallet privé</h1>
+                <p>
+                    Bonjour {{ sessionService.session()?.displayName ?? 'Utilisateur' }}, l'interface est connectée aux
+                    endpoints backend pour suivre les wallets, le solde et les dernières opérations.
+                </p>
+            </div>
+
+            <button type="button" class="refresh-button" (click)="refresh()" [disabled]="loading()">Rafraîchir</button>
+        </div>
+
+        @if (error()) {
+        <p class="dashboard-alert" role="alert">{{ error() }}</p>
+        }
     </header>
 
     <div class="dashboard-grid">
-        <article>
-            <h2>Espace client</h2>
-            <p>Suivi du solde, des opérations et des actions rapides.</p>
-            <a routerLink="/private/client">Ouvrir</a>
+        <article class="dashboard-card dashboard-card--wide">
+            <div class="card-header">
+                <h2>Wallets disponibles</h2>
+                <span>{{ wallets().length }} éléments</span>
+            </div>
+
+            @if (wallets().length === 0) {
+            <p class="muted">Aucun wallet chargé pour le moment.</p>
+            } @else {
+            <div class="wallet-list">
+                @for (wallet of wallets(); track wallet.phoneNumber ?? wallet.code ?? wallet.id) {
+                <button type="button" class="wallet-item" [class.is-selected]="selectedPhone() === wallet.phoneNumber"
+                    (click)="selectWallet(wallet)">
+                    <strong>{{ wallet.fullName || wallet.ownerName || wallet.email || wallet.phoneNumber || 'Wallet'
+                        }}</strong>
+                    <span>{{ wallet.phoneNumber || wallet.code || 'Sans identifiant' }}</span>
+                    <small>{{ wallet.currency || 'XOF' }} · {{ wallet.balance ?? wallet.availableBalance ?? '0'
+                        }}</small>
+                </button>
+                }
+            </div>
+            }
         </article>
 
         <article>
-            <h2>Espace guichet</h2>
-            <p>Opérations terrain, validation et clôture.</p>
-            <a routerLink="/private/agent">Ouvrir</a>
+            <div class="card-header">
+                <h2>Solde actuel</h2>
+            </div>
+
+            <p class="metric">{{ balance() ?? 'N/D' }}</p>
+            <p class="muted">Wallet sélectionné : {{ selectedWallet().phoneNumber ?? 'aucun' }}</p>
+            <div class="card-actions">
+                <a routerLink="/private/client">Opérations client</a>
+                <a routerLink="/private/agent">Ops guichet</a>
+            </div>
+        </article>
+
+        <article>
+            <div class="card-header">
+                <h2>Transactions récentes</h2>
+            </div>
+
+            @if (transactions().length === 0) {
+            <p class="muted">Aucune transaction disponible.</p>
+            } @else {
+            <ul class="data-list">
+                @for (transaction of transactions(); track transaction.id ?? transaction.createdAt ?? $index) {
+                <li>
+                    <strong>{{ transaction.type || 'Transaction' }}</strong>
+                    <span>{{ transaction.amount ?? 0 }} {{ transaction.currency || '' }}</span>
+                    <small>{{ transaction.description || transaction.status || transaction.createdAt || 'Aucune
+                        précision' }}</small>
+                </li>
+                }
+            </ul>
+            }
+        </article>
+
+        <article>
+            <div class="card-header">
+                <h2>Factures en cours</h2>
+            </div>
+
+            @if (currentFactures().length === 0) {
+            <p class="muted">Aucune facture courante trouvée.</p>
+            } @else {
+            <ul class="data-list">
+                @for (facture of currentFactures(); track facture.reference ?? $index) {
+                <li>
+                    <strong>{{ facture.serviceName || facture.reference || 'Facture' }}</strong>
+                    <span>{{ facture.amount ?? 0 }} {{ facture.currency || '' }}</span>
+                    <small>{{ facture.unite || facture.status || facture.dueDate || 'Détail indisponible' }}</small>
+                </li>
+                }
+            </ul>
+            }
         </article>
     </div>
 </section>

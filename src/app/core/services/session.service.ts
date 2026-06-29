@@ -27,14 +27,20 @@ export class SessionService {
         return 'Visiteur';
     });
 
-    login(credentials: LoginCredentials): SessionUser {
-        const role = this.inferRole(credentials.email);
+    login(credentials: LoginCredentials, sessionData?: Partial<SessionUser>): SessionUser {
+        const role = sessionData?.role ?? this.inferRole(credentials.email);
+        const email = sessionData?.email?.trim() || credentials.email.trim();
         const session: SessionUser = {
-            email: credentials.email.trim(),
-            displayName: this.buildDisplayName(credentials.email, role),
+            email,
+            displayName: sessionData?.displayName ?? this.buildDisplayName(email, role),
             role,
+            token: sessionData?.token,
         };
 
+        return this.setSession(session);
+    }
+
+    setSession(session: SessionUser): SessionUser {
         this.sessionState.set(session);
         this.persistSession(session);
 

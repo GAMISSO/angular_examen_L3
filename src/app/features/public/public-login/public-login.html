@@ -1,8 +1,19 @@
-<section class="login-layout">
-    <article class="login-panel">
-        <h1>Connexion</h1>
+<section class="auth-layout">
+    <article class="auth-panel auth-panel--login">
+        <p class="eyebrow">Plateforme wallet</p>
+        <h1>Connexion sécurisée</h1>
+        <p class="lead">Connectez-vous pour accéder à votre espace client ou guichet, sans la vieille page en deux
+            colonnes.</p>
 
-        <form class="login-form" [formGroup]="loginForm" (ngSubmit)="submit()" novalidate>
+        @if (feedback()) {
+        <p class="message message--success" role="status">{{ feedback() }}</p>
+        }
+
+        @if (errorMessage()) {
+        <p class="message message--error" role="alert">{{ errorMessage() }}</p>
+        }
+
+        <form class="auth-form" [formGroup]="loginForm" (ngSubmit)="submit()" novalidate>
             <label>
                 <span>Email</span>
                 <input type="email" formControlName="email" placeholder="exemple@badwallet.tn" autocomplete="email" />
@@ -15,19 +26,23 @@
             </label>
 
             @if (loginForm.invalid && loginForm.touched) {
-            <p class="error" role="alert">Saisissez un email valide et un mot de passe d’au moins 4 caractères.</p>
+            <p class="message message--error" role="alert">Saisissez un email valide et un mot de passe d’au moins 4
+                caractères.</p>
             }
 
             <div class="actions">
                 <button class="primary" type="submit" [disabled]="submitting()">Entrer</button>
+                <button class="secondary" type="button" (click)="demoConnect()">Connexion démo</button>
             </div>
         </form>
     </article>
 
-    <article class="login-panel">
-        <h1>Créer un compte client</h1>
+    <article class="auth-panel auth-panel--register" id="register">
+        <p class="eyebrow">Nouveau client</p>
+        <h2>Créer un compte</h2>
+        <p class="lead">Le bouton en haut à droite vous amène ici pour l’ouverture d’un compte client.</p>
 
-        <form class="login-form" [formGroup]="createClientForm" (ngSubmit)="createClientAccount()" novalidate>
+        <form class="auth-form" [formGroup]="createClientForm" (ngSubmit)="createClientAccount()" novalidate>
             <label>
                 <span>Nom complet</span>
                 <input type="text" formControlName="fullName" placeholder="Nom et prénom" autocomplete="name" />
@@ -50,11 +65,12 @@
             </label>
 
             @if (createClientForm.invalid && createClientForm.touched) {
-            <p class="error" role="alert">Vérifiez le nom, l’email, le téléphone et le mot de passe.</p>
+            <p class="message message--error" role="alert">Vérifiez le nom, l’email, le téléphone et le mot de passe.
+            </p>
             }
 
             <div class="actions">
-                <button class="primary" type="submit" [disabled]="creatingAccount()">Créer le compte</button>
+                <button class="primary" type="submit" [disabled]="registering()">Créer le compte</button>
             </div>
         </form>
     </article>

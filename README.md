@@ -1,59 +1,62 @@
-# FrontendBadwallet
+# BadWallet Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.1.
+Interface Angular 21 pour BadWallet, organisée en zones publiques et privées, avec un dashboard branché sur les endpoints wallet.
 
-## Development server
+## Architecture
 
-To start a local development server, run:
+Le projet utilise Angular 21 avec composants standalone, routing lazy-loaded, SSR et hydration côté navigateur.
 
-```bash
-ng serve
-```
+Structure principale :
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- `src/app/core` : services, gardes et modèles de session.
+- `src/app/features/public` : écran de connexion et création de compte.
+- `src/app/features/private` : dashboard et écrans protégés.
+- `src/app/layout` : shells public et privé.
+- `src/app/shared` : composants réutilisables.
 
-## Code scaffolding
+## Backend attendu
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- API auth : `http://localhost:8081`
+- API wallets : `http://localhost:8080`
 
-```bash
-ng generate component component-name
-```
+Le front appelle :
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+- `POST /api/auth/login`
+- `POST /api/auth/register-client`
+- `GET /api/wallets`
+- `GET /api/wallets/{phone}/balance`
+- `GET /api/wallets/{phone}/transactions`
+- `GET /api/external/factures/{code}/current`
 
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+## Lancer le projet
 
 ```bash
-ng test
+npm install
+npm start
 ```
 
-## Running end-to-end tests
+Ensuite ouvrir `http://localhost:4200/`.
 
-For end-to-end (e2e) testing, run:
+## Commandes utiles
 
 ```bash
-ng e2e
+npm run build
+npm test
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## Flux de navigation
 
-## Additional Resources
+- L’entrée par défaut redirige vers `/public/login`.
+- Une session valide est stockée localement par `SessionService`.
+- Les routes privées sont protégées par des gardes Angular.
+- Le dashboard charge les wallets, le solde, les transactions et les factures courantes depuis le backend.
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Point d’attention sur la connexion
+
+Si la connexion reste bloquée, le plus probable est que le front ne reçoive pas de réponse exploitable depuis l’API auth. Dans ce cas :
+
+1. Vérifier que le service sur le port `8081` est démarré.
+2. Vérifier que les endpoints `/api/auth/login` et `/api/auth/register-client` existent réellement.
+3. Vérifier que l’API autorise les appels depuis le front Angular.
+
+Le détail complet du diagnostic est dans [RAPPORT_TECHNIQUE.md](RAPPORT_TECHNIQUE.md).
